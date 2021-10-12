@@ -1,4 +1,5 @@
 import { Carrito } from "../models/Carrito.js";
+import fs from 'fs';
 
 const carrito = new Carrito();
 
@@ -14,6 +15,9 @@ export const addCarrito = (req, res) => {
     const {body} = req;
 
     carrito.productos.push(body);
+    let data = JSON.stringify(body);
+    fs.writeFile('./src/carrito.json', data, ()=> console.log("producto agregado al carrito"));
+    console.log(body);
     return res.status(201).json(body);
 
 }   

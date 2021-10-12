@@ -1,10 +1,14 @@
 import {config} from "../constants/index.js";
-import { Producto } from "../models/Productos.js";
+import {Producto} from "../models/Productos.js";
+import fs, { writeFile } from 'fs';
 
 const productos = [];
 
+let data = fs.readFileSync('./src/productos.json');
+let readData = JSON.parse(data);
+
 export const getProductos = (req, res) => {
-    return res.status(200).json(productos);
+    return res.status(200).json(readData);
 }
 
 export const addProducto = (req, res) => {
@@ -12,10 +16,13 @@ export const addProducto = (req, res) => {
     /* if(!config.isAdmin)
         next({route: "hola", method: "POST"});
  */
-    const {nombre, descripcion, codigo, foto, precio, stock} = req.body;
+    const {id, timestamp, nombre, descripcion, codigo, foto, precio, stock} = req.body;
 
-    const newProducto = new Producto(nombre, descripcion, codigo, foto, precio, stock);
+    const newProducto = new Producto(id, timestamp, nombre, descripcion, codigo, foto, precio, stock);
     productos.push(newProducto);
+    console.log(newProducto);
+    let dataToFile = JSON.stringify(newProducto, null, 2);
+    fs.writeFile('./src/productos.json', dataToFile, ()=> {console.log("Produto guardado");})
     return res.status(201).json(newProducto);
 
 };
@@ -35,6 +42,9 @@ export const updateProducto = (req, res) => {
         (producto.prcio = precio),
         (producto.stock = stock);
 
+    
+    let dataToFile = JSON.stringify(producto)
+    fs.writeFile('./src/productos.json', dataToFile, ()=>console.log("producto actualizado"));  
     res.status(200).json(producto)
 
 };
