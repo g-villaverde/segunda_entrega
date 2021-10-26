@@ -13,9 +13,7 @@ export const getProductos = (req, res) => {
 
 export const addProducto = (req, res) => {
 
-    /* if(!config.isAdmin)
-        next({route: "hola", method: "POST"});
- */
+    
     const {id, timestamp, nombre, descripcion, codigo, foto, precio, stock} = req.body;
 
     const newProducto = new Producto(id, timestamp, nombre, descripcion, codigo, foto, precio, stock);
